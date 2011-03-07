@@ -8,6 +8,6 @@
 import java.lang.*;
 import java.util.*;
 
-public class MeView {
-    double t, v, vt, x, y, r, a, at;
+public class MeView extends AgentView {
+    double vt, a, at;
 }

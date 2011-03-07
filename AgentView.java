@@ -8,7 +8,6 @@
 import java.lang.*;
 import java.util.*;
 
-public class AgentView {
-    Class c;
-    double r, t, v, x, y;
+public class AgentView extends ThingView {
+    double t, v;
 }
