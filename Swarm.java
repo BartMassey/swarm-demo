@@ -1,4 +1,6 @@
-/* Copyright (c) 2011 Bart Massey */
+// Copyright (c) 2011 Bart Massey
+
+// Animated "swarm of bugs" for AI swarm demo.
 
 import java.lang.*;
 import java.util.*;
@@ -28,8 +30,8 @@ class Bug {
 	x = prng.nextDouble();
 	y = prng.nextDouble();
 	t = 2 * Math.PI * prng.nextDouble();
-	v = randV0();
-	vt = randV0() * (2 * Math.PI);
+	v = prng.nextDouble() * V0;
+	vt = prng.nextDouble() * V0 * (2 * Math.PI);
 	a = 0;
 	at = 0;
     }
@@ -39,8 +41,8 @@ class Bug {
 	int x0 = (int) Math.floor(x * d + 0.5);
 	int y0 = (int) Math.floor(y * d + 0.5);
 	int r0 = (int) Math.floor(r * d + 0.5);
-	int x1 = x0 + (int) Math.floor(r0 * Math.cos(t) + 0.5);
-	int y1 = y0 + (int) Math.floor(- r0 * Math.sin(t) + 0.5);
+	int x1 = x0 - (int) Math.floor(1.3 * r0 * Math.cos(t) + 0.5);
+	int y1 = y0 - (int) Math.floor(- 1.3 * r0 * Math.sin(t) + 0.5);
 	g.drawOval(x0 - r0, y0 - r0, 2 * r0, 2 * r0);
 	g.setColor(Color.red);
 	g.drawLine(x0, y0, x1, y1);
@@ -54,15 +56,18 @@ class Bug {
     public boolean bugCollision(Bug b) {
 	double dx = b.x - x;
 	double dy = b.y - y;
-	return (dx * dx + dy * dy <= r * r);
+	return (dx * dx + dy * dy <= 4 * r * r);
+    }
+
+    public void thump() {
+	v = 0; vt = 0;
+	a = 0; at = 0;
     }
 
     public void step() {
-	double x0 = x;
+	double x0 = x, y0 = y, t0 = t;
 	x += v * Math.cos(t) * dt;
-	double y0 = y;
 	y += - v * Math.sin(t) * dt;
-	double t0 = t;
 	t += vt * dt;
 	while (t < 0)
 	    t += 2 * Math.PI;
@@ -70,8 +75,6 @@ class Bug {
 	    t -= 2 * Math.PI;
 	if (playfield.collision(this)) {
 	    x = x0; y = y0; t = t0;
-	    v = 0; vt = 0;
-	    a = 0; at = 0;
 	    return;
 	}
 	v += a * dt;
@@ -87,7 +90,7 @@ class Playfield extends JPanel implements Runnable {
     boolean threadSuspended = true;
     // http://www.rgagnon.com/javadetails/java-0260.html
     public static final BasicStroke stroke = new BasicStroke(2.0f);
-    public static final double DT = 0.1;
+    public static final double DT = 0.02;
 
     public Playfield(int nbugs) {
 	bugs = new Bug[nbugs];
@@ -102,13 +105,21 @@ class Playfield extends JPanel implements Runnable {
     }
 
     public boolean collision(Bug b) {
-	if (b.wallCollision())
-	    return true;
-	for (int i = 0; i < bugs.length; i++)
+	boolean result = false;
+
+	if (b.wallCollision()) {
+	    result = true;
+	    b.thump();
+	}
+	for (int i = 0; i < bugs.length; i++) {
 	    if (bugs[i] != null && bugs[i] != b &&
-		bugs[i].bugCollision(b))
-		return true;
-	return false;
+		bugs[i].bugCollision(b)) {
+		result = true;
+		b.thump();
+		bugs[i].thump();
+	    }
+	}
+	return result;
     }
 
     public void paintComponent(Graphics g) {
