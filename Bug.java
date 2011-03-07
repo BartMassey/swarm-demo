@@ -26,6 +26,7 @@ public class Bug extends Agent {
 	AMAX = 1.0;
 	VTMIN = -0.5;
 	VTMAX = 0.5;
+	CDRAG = 100.0;
 	ai = new BugAI();
     }
 

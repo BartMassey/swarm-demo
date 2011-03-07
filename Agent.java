@@ -16,7 +16,7 @@ abstract public class Agent extends Motile {
     double a;
     double dt = Playfield.DT;
     AI ai;
-    double AMIN, AMAX, VTMIN, VTMAX;
+    double AMIN, AMAX, VTMIN, VTMAX, CDRAG;
 
     public Agent(Playfield playfield) {
 	super(playfield);
@@ -38,6 +38,7 @@ abstract public class Agent extends Motile {
 	    return;
 	}
 	v += a * dt;
+	v -= v * r * r * CDRAG;
     }
 
     static double clamp(double v, double lo, double hi) {
