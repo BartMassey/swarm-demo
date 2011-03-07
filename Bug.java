@@ -22,7 +22,10 @@ public class Bug extends Agent {
 	v = prng.nextDouble() * V0;
 	vt = Math.PI * nextSignedDouble() * V0;
 	a = 0;
-	at = 0;
+	AMIN = 0.0;
+	AMAX = 1.0;
+	VTMIN = -0.5;
+	VTMAX = 0.5;
 	ai = new BugAI();
     }
 
@@ -39,7 +42,6 @@ public class Bug extends Agent {
     }
 
     public void thump() {
-	v = 0; vt = 0;
-	a = 0; at = 0;
+	v = 0; a = 0;
     }
 }

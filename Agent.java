@@ -13,9 +13,10 @@ import java.awt.*;
 abstract public class Agent extends Motile {
     double t;
     double v, vt;
-    double a, at;
+    double a;
     double dt = Playfield.DT;
     AI ai;
+    double AMIN, AMAX, VTMIN, VTMAX;
 
     public Agent(Playfield playfield) {
 	super(playfield);
@@ -37,7 +38,14 @@ abstract public class Agent extends Motile {
 	    return;
 	}
 	v += a * dt;
-	vt += at * dt;
+    }
+
+    static double clamp(double v, double lo, double hi) {
+	if (v < lo)
+	    return lo;
+	if (v > hi)
+	    return hi;
+	return v;
     }
 
     public void control(Agent me, Agent[] agents, Thing[] things) {
@@ -48,7 +56,6 @@ abstract public class Agent extends Motile {
 	meV.y = me.y;
 	meV.r = me.r;
 	meV.a = me.a;
-	meV.at = me.at;
 	AgentView[] aVs = new AgentView[agents.length];
 	for (int i = 0; i < aVs.length; i++) {
 	    aVs[i] = new AgentView();
@@ -62,7 +69,7 @@ abstract public class Agent extends Motile {
 	if (things != null)
 	    throw new Error("internal error: no things yet");
 	ai.control(meV, aVs, null);
-	me.at = meV.at;
-	me.a = meV.a;
+	me.a = clamp (meV.a, me.AMIN, me.AMAX);
+	me.vt = clamp (meV.vt, me.VTMIN, me.VTMAX);
     }
 }
