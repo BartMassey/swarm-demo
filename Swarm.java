@@ -96,7 +96,8 @@ class Playfield extends JPanel implements Runnable {
     boolean threadSuspended = true;
     // http://www.rgagnon.com/javadetails/java-0260.html
     public static final BasicStroke stroke = new BasicStroke(2.0f);
-    public static final double DT = 0.1;
+    public static final double DT = 0.01;   // Physics time increment
+    public static final double DDT = 10;   // Multiple for display time
 
     public Playfield(int nbugs) {
 	bugs = new Bug[nbugs];
@@ -152,8 +153,9 @@ class Playfield extends JPanel implements Runnable {
     public void run() {
 	while(true) {
 	    long then = System.currentTimeMillis();
-	    for (int i = 0; i < bugs.length; i++)
-		bugs[i].step();
+	    for (int j = 0; j < DDT; j++)
+		for (int i = 0; i < bugs.length; i++)
+		    bugs[i].step();
 	    if (threadSuspended) {
 		synchronized(this) {
 		    while (threadSuspended) {
@@ -166,7 +168,7 @@ class Playfield extends JPanel implements Runnable {
 		}
 	    }
 	    repaint();
-	    long interval = (long) Math.floor(1000 * DT);
+	    long interval = (long) Math.floor(1000 * DT * DDT);
 	    long now = System.currentTimeMillis();
 	    interval -= now - then;
 	    if (interval < 0) {
