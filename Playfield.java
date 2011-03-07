@@ -20,10 +20,12 @@ public class Playfield extends JPanel implements Runnable {
     private boolean threadSuspended = true;
     // http://www.rgagnon.com/javadetails/java-0260.html
     public static final BasicStroke stroke = new BasicStroke(2.0f);
-    public static final double DT = 0.01;   // Physics time increment
-    public static final double DDT = 10;   // Multiple for display time
+    public static double DT;   // Physics time increment
+    public static int DDT;   // Multiple for display time
 
-    public Playfield(int nagents) {
+    public Playfield(int nagents, double dt, int ddt) {
+	DT = dt;
+	DDT = ddt;
 	agents = new Agent[nagents];
 	for (int i = 0; i < nagents; i++)
 	    do

@@ -29,9 +29,9 @@ abstract public class Agent extends Motile {
 	x += v * Math.cos(t) * dt;
 	y += - v * Math.sin(t) * dt;
 	t += vt * dt;
-	while (t < 0)
+	while (t < - Math.PI)
 	    t += 2 * Math.PI;
-	while (t >= 2 * Math.PI)
+	while (t >= Math.PI)
 	    t -= 2 * Math.PI;
        	if (playfield.collision(this)) {
 	    x = x0; y = y0; t = t0;

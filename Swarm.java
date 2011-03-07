@@ -29,7 +29,13 @@ public class Swarm {
     private static void createAndShowGUI(int nbugs) {
 	JFrame f = new JFrame("Swarm Demo");
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	Playfield p = new Playfield(nbugs);
+	double dt = 0.01;
+	int ddt = 20;
+	if (nbugs > 20) {
+	    dt = 0.1;
+	    ddt = 2;
+	}
+	Playfield p = new Playfield(nbugs, dt, ddt);
         f.add(p);
 	f.pack();
 	f.setVisible(true);
