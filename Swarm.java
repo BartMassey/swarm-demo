@@ -9,25 +9,28 @@ import java.awt.*;
 
 
 class Bug {
-    static final double DT = 0.1;
     double x, y, t;
-    double vx, vy, vt;
-    double ax, ay, at;
+    double v, vt;
+    double a, at;
     double r = 0.02;
     static final double V0 = 0.1;
     static Random prng = new Random();
     Playfield playfield;
+    double dt;
+
+    double randV0() {
+	return (2.0 * prng.nextDouble() - 1.0) * V0;
+    }
 
     Bug(Playfield playfield) {
 	this.playfield = playfield;
+	dt = Playfield.DT;
 	x = prng.nextDouble();
 	y = prng.nextDouble();
 	t = 2 * Math.PI * prng.nextDouble();
-	vx = prng.nextDouble() * V0;
-	vy = prng.nextDouble() * V0;
-	vt = prng.nextDouble() * V0 / (2 * Math.PI);
-	ax = 0;
-	ay = 0;
+	v = randV0();
+	vt = randV0() * (2 * Math.PI);
+	a = 0;
 	at = 0;
     }
 
@@ -54,35 +57,37 @@ class Bug {
 	return (dx * dx + dy * dy <= r * r);
     }
 
-    public void step(Bug b) {
+    public void step() {
 	double x0 = x;
-	x += vx * DT;
+	x += v * Math.cos(t) * dt;
 	double y0 = y;
-	y += vy * DT;
+	y += - v * Math.sin(t) * dt;
 	double t0 = t;
-	t += vt * DT;
+	t += vt * dt;
 	while (t < 0)
 	    t += 2 * Math.PI;
 	while (t >= 2 * Math.PI)
 	    t -= 2 * Math.PI;
 	if (playfield.collision(this)) {
 	    x = x0; y = y0; t = t0;
-	    vx = 0; vy = 0; vt = 0;
-	    ax = 0; ay = 0; at = 0;
+	    v = 0; vt = 0;
+	    a = 0; at = 0;
 	    return;
 	}
-	vx += ax * DT;
-	vy += ay * DT;
-	vt += at * DT;
+	v += a * dt;
+	vt += at * dt;
     }
 }
 
-class Playfield extends JPanel {
+class Playfield extends JPanel implements Runnable {
     static final long serialVersionUID = 0;
     Bug[] bugs;
     int d;
+    Thread t = null;
+    boolean threadSuspended = true;
     // http://www.rgagnon.com/javadetails/java-0260.html
     public static final BasicStroke stroke = new BasicStroke(2.0f);
+    public static final double DT = 0.1;
 
     public Playfield(int nbugs) {
 	bugs = new Bug[nbugs];
@@ -125,6 +130,51 @@ class Playfield extends JPanel {
 	for (int i = 0; i < bugs.length; i++)
 	    bugs[i].paintComponent(g, d);
     }
+
+    // http://profs.etsmtl.ca/mmcguffin/learn/java/06-threads/
+    public void run() {
+	while(true) {
+	    for (int i = 0; i < bugs.length; i++)
+		bugs[i].step();
+	    if (threadSuspended) {
+		synchronized(this) {
+		    while (threadSuspended) {
+			try {
+			    t.wait();
+			} catch(InterruptedException e) {
+			    System.exit(1);
+			}
+		    }
+		}
+	    }
+	    repaint();
+	    try {
+		t.sleep((int) Math.floor(1000 * DT));
+	    } catch(InterruptedException e) {
+		System.exit(1);
+	    }
+	}
+    }
+
+    public void start() {
+	if ( t == null ) {
+	    t = new Thread( this );
+	    threadSuspended = false;
+	    t.start();
+	}
+	else {
+	    if ( threadSuspended ) {
+		threadSuspended = false;
+		synchronized( this ) {
+		    notify();
+		}
+	    }
+	}
+    }
+
+    public void stop() {
+	threadSuspended = true;
+    }
 }
 
 public class Swarm {
@@ -144,8 +194,10 @@ public class Swarm {
     private static void createAndShowGUI(int nbugs) {
 	JFrame f = new JFrame("Swarm Demo");
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.add(new Playfield(nbugs));
+	Playfield p = new Playfield(nbugs);
+        f.add(p);
 	f.pack();
 	f.setVisible(true);
+	p.start();
     }
 }
