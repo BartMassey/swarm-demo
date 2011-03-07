@@ -10,28 +10,17 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 
-public class Bug {
-    private double x, y, t;
-    private double v, vt;
-    private double a, at;
-    private double r = 0.02;
-    private static final double V0 = 0.2;
-    private static Random prng = new Random();
-    private Playfield playfield;
-    private double dt;
-
-    private double randV0() {
-	return (2.0 * prng.nextDouble() - 1.0) * V0;
-    }
+public class Bug extends Agent {
+    static double V0 = 0.2;
 
     public Bug(Playfield playfield) {
-	this.playfield = playfield;
-	dt = Playfield.DT;
+	super(playfield);
+	r = 0.02;
 	x = prng.nextDouble();
 	y = prng.nextDouble();
-	t = 2 * Math.PI * prng.nextDouble();
+	t = Math.PI * nextSignedDouble();
 	v = prng.nextDouble() * V0;
-	vt = prng.nextDouble() * V0 * (2 * Math.PI);
+	vt = Math.PI * nextSignedDouble() * V0;
 	a = 0;
 	at = 0;
     }
@@ -48,37 +37,9 @@ public class Bug {
 	g.drawLine(x0, y0, x1, y1);
     }
 
-    public boolean wallCollision() {
-	return (x - r <= 0.0 || x + r >= 1.0 ||
-		y - r <= 0.0 || y + r >= 1.0);
-    }
-
-    public boolean bugCollision(Bug b) {
-	double dx = b.x - x;
-	double dy = b.y - y;
-	return (dx * dx + dy * dy <= 4 * r * r);
-    }
-
     public void thump() {
 	v = 0; vt = 0;
 	a = 0; at = 0;
-    }
-
-    public void step() {
-	double x0 = x, y0 = y, t0 = t;
-	x += v * Math.cos(t) * dt;
-	y += - v * Math.sin(t) * dt;
-	t += vt * dt;
-	while (t < 0)
-	    t += 2 * Math.PI;
-	while (t >= 2 * Math.PI)
-	    t -= 2 * Math.PI;
-	if (playfield.collision(this)) {
-	    x = x0; y = y0; t = t0;
-	    return;
-	}
-	v += a * dt;
-	vt += at * dt;
     }
 }
 

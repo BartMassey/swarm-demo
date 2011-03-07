@@ -14,7 +14,7 @@ import java.awt.*;
 
 public class Playfield extends JPanel implements Runnable {
     static final long serialVersionUID = 0;
-    private Bug[] bugs;
+    private Agent[] agents;
     private int d;
     private Thread t = null;
     private boolean threadSuspended = true;
@@ -23,31 +23,31 @@ public class Playfield extends JPanel implements Runnable {
     public static final double DT = 0.01;   // Physics time increment
     public static final double DDT = 10;   // Multiple for display time
 
-    public Playfield(int nbugs) {
-	bugs = new Bug[nbugs];
-	for (int i = 0; i < nbugs; i++)
+    public Playfield(int nagents) {
+	agents = new Agent[nagents];
+	for (int i = 0; i < nagents; i++)
 	    do
-		bugs[i] = new Bug(this);
-	    while(collision(bugs[i]));
+		agents[i] = new Bug(this);
+	    while(collision(agents[i]));
     }
 
     public Dimension getPreferredSize() {
 	return new Dimension(250,250);
     }
 
-    public boolean collision(Bug b) {
+    public boolean collision(Agent b) {
 	boolean result = false;
 
 	if (b.wallCollision()) {
 	    result = true;
 	    b.thump();
 	}
-	for (int i = 0; i < bugs.length; i++) {
-	    if (bugs[i] != null && bugs[i] != b &&
-		bugs[i].bugCollision(b)) {
+	for (int i = 0; i < agents.length; i++) {
+	    if (agents[i] != null && agents[i].id != b.id &&
+		agents[i].thingCollision(b)) {
 		result = true;
 		b.thump();
-		bugs[i].thump();
+		agents[i].thump();
 	    }
 	}
 	return result;
@@ -68,8 +68,8 @@ public class Playfield extends JPanel implements Runnable {
 	g.translate((ds.width - d) / 2, (ds.height - d) / 2);
 	g.setColor(Color.black);
 	g.drawRect(0, 0, d, d);
-	for (int i = 0; i < bugs.length; i++)
-	    bugs[i].paintComponent(g, d);
+	for (int i = 0; i < agents.length; i++)
+	    agents[i].paintComponent(g, d);
     }
 
     // http://profs.etsmtl.ca/mmcguffin/learn/java/06-threads/
@@ -77,19 +77,8 @@ public class Playfield extends JPanel implements Runnable {
 	while(true) {
 	    long then = System.currentTimeMillis();
 	    for (int j = 0; j < DDT; j++)
-		for (int i = 0; i < bugs.length; i++)
-		    bugs[i].step();
-	    if (threadSuspended) {
-		synchronized(this) {
-		    while (threadSuspended) {
-			try {
-			    t.wait();
-			} catch(InterruptedException e) {
-			    System.exit(1);
-			}
-		    }
-		}
-	    }
+		for (int i = 0; i < agents.length; i++)
+		    agents[i].step();
 	    repaint();
 	    long interval = (long) Math.floor(1000 * DT * DDT);
 	    long now = System.currentTimeMillis();
@@ -103,20 +92,30 @@ public class Playfield extends JPanel implements Runnable {
 		    System.exit(1);
 		}
 	    }
+	    if (threadSuspended) {
+		synchronized(this) {
+		    while (threadSuspended) {
+			try {
+			    t.wait();
+			} catch(InterruptedException e) {
+			    System.exit(1);
+			}
+		    }
+		}
+	    }
 	}
     }
 
     public void start() {
-	if ( t == null ) {
-	    t = new Thread( this );
+	if (t == null) {
+	    t = new Thread(this);
 	    threadSuspended = false;
 	    t.start();
-	}
-	else {
-	    if ( threadSuspended ) {
+	} else {
+	    if (threadSuspended) {
 		threadSuspended = false;
-		synchronized( this ) {
-		    notify();
+		synchronized(this) {
+		    t.notify();
 		}
 	    }
 	}
