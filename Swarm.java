@@ -9,14 +9,26 @@ import java.awt.*;
 
 
 class Bug {
+    static final double DT = 0.1;
     double x, y, t;
+    double vx, vy, vt;
+    double ax, ay, at;
     double r = 0.02;
+    static final double V0 = 0.1;
     static Random prng = new Random();
+    Playfield playfield;
 
-    Bug() {
+    Bug(Playfield playfield) {
+	this.playfield = playfield;
 	x = prng.nextDouble();
 	y = prng.nextDouble();
 	t = 2 * Math.PI * prng.nextDouble();
+	vx = prng.nextDouble() * V0;
+	vy = prng.nextDouble() * V0;
+	vt = prng.nextDouble() * V0 / (2 * Math.PI);
+	ax = 0;
+	ay = 0;
+	at = 0;
     }
 
     public void paintComponent(Graphics g, int d) {
@@ -41,6 +53,28 @@ class Bug {
 	double dy = b.y - y;
 	return (dx * dx + dy * dy <= r * r);
     }
+
+    public void step(Bug b) {
+	double x0 = x;
+	x += vx * DT;
+	double y0 = y;
+	y += vy * DT;
+	double t0 = t;
+	t += vt * DT;
+	while (t < 0)
+	    t += 2 * Math.PI;
+	while (t >= 2 * Math.PI)
+	    t -= 2 * Math.PI;
+	if (playfield.collision(this)) {
+	    x = x0; y = y0; t = t0;
+	    vx = 0; vy = 0; vt = 0;
+	    ax = 0; ay = 0; at = 0;
+	    return;
+	}
+	vx += ax * DT;
+	vy += ay * DT;
+	vt += at * DT;
+    }
 }
 
 class Playfield extends JPanel {
@@ -54,7 +88,7 @@ class Playfield extends JPanel {
 	bugs = new Bug[nbugs];
 	for (int i = 0; i < nbugs; i++)
 	    do
-		bugs[i] = new Bug();
+		bugs[i] = new Bug(this);
 	    while(collision(bugs[i]));
     }
 
