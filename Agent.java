@@ -57,6 +57,11 @@ abstract public class Agent extends Motile {
 	meV.y = me.y;
 	meV.r = me.r;
 	meV.a = me.a;
+	meV.AMIN = me.AMIN;
+	meV.AMAX = me.AMAX;
+	meV.VTMIN = me.VTMIN;
+	meV.VTMAX = me.VTMAX;
+	meV.CDRAG = me.CDRAG;
 	AgentView[] aVs = new AgentView[agents.length];
 	for (int i = 0; i < aVs.length; i++) {
 	    aVs[i] = new AgentView();

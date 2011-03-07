@@ -10,4 +10,5 @@ import java.util.*;
 
 public class MeView extends AgentView {
     double vt, a, at;
+    double AMIN, AMAX, VTMIN, VTMAX, CDRAG;
 }

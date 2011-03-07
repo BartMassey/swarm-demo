@@ -18,7 +18,7 @@ public class BugAI extends AI {
     public void control(MeView me, AgentView[] agents, ThingView[] things) {
 	if (things != null)
 	    throw new Error("internal error: no things yet");
-	me.a = prng.nextDouble();
+	me.a = prng.nextDouble() * me.AMAX;
 	me.vt += Math.PI * nextSignedDouble() * dt;
     }
 }

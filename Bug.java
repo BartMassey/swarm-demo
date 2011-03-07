@@ -22,8 +22,8 @@ public class Bug extends Agent {
 	v = prng.nextDouble() * V0;
 	vt = Math.PI * nextSignedDouble() * V0 * dt;
 	a = 0;
-	AMIN = -0.5;
-	AMAX = 1.0;
+	AMIN = -0.5 * dt;
+	AMAX = 2.0 * dt;
 	VTMIN = - 2.0 * Math.PI * dt;
 	VTMAX = 2.0 * Math.PI * dt;
 	CDRAG = 100.0;
