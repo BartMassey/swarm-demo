@@ -23,6 +23,7 @@ public class Bug extends Agent {
 	vt = Math.PI * nextSignedDouble() * V0;
 	a = 0;
 	at = 0;
+	ai = new BugAI();
     }
 
     public void paintComponent(Graphics g, int d) {
@@ -42,4 +43,3 @@ public class Bug extends Agent {
 	a = 0; at = 0;
     }
 }
-
