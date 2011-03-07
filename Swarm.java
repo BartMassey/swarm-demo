@@ -96,7 +96,7 @@ class Playfield extends JPanel implements Runnable {
     boolean threadSuspended = true;
     // http://www.rgagnon.com/javadetails/java-0260.html
     public static final BasicStroke stroke = new BasicStroke(2.0f);
-    public static final double DT = 0.02;
+    public static final double DT = 0.1;
 
     public Playfield(int nbugs) {
 	bugs = new Bug[nbugs];
@@ -151,6 +151,7 @@ class Playfield extends JPanel implements Runnable {
     // http://profs.etsmtl.ca/mmcguffin/learn/java/06-threads/
     public void run() {
 	while(true) {
+	    long then = System.currentTimeMillis();
 	    for (int i = 0; i < bugs.length; i++)
 		bugs[i].step();
 	    if (threadSuspended) {
@@ -165,10 +166,17 @@ class Playfield extends JPanel implements Runnable {
 		}
 	    }
 	    repaint();
-	    try {
-		t.sleep((int) Math.floor(1000 * DT));
-	    } catch(InterruptedException e) {
-		System.exit(1);
+	    long interval = (long) Math.floor(1000 * DT);
+	    long now = System.currentTimeMillis();
+	    interval -= now - then;
+	    if (interval < 0) {
+		System.err.println("time overrun");
+	    } else {
+		try {
+		    t.sleep(interval);
+		} catch(InterruptedException e) {
+		    System.exit(1);
+		}
 	    }
 	}
     }
