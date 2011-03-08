@@ -20,7 +20,7 @@ public class Playfield extends JPanel implements Runnable {
     private boolean threadSuspended = true;
     private static Random prng = new Random();
     // http://www.rgagnon.com/javadetails/java-0260.html
-    public static final BasicStroke stroke = new BasicStroke(2.0f);
+    public static BasicStroke stroke;
     public static double DT;   // Physics time increment
     public static int DDT;   // Multiple for display time
 
@@ -68,12 +68,14 @@ public class Playfield extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
 	super.paintComponent(g);
 
+	Dimension ds = getSize();
+	d = Math.min(ds.width, ds.height) - 5;
+	float strokeWidth = (float) d / 200.0f;
+	stroke = new BasicStroke(strokeWidth);
 	Graphics2D g2d = (Graphics2D) g;
 	g2d.setStroke(stroke);
 	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 			    RenderingHints.VALUE_ANTIALIAS_ON);
-	Dimension ds = getSize();
-	d = Math.min(ds.width, ds.height) - 5;
 	if (d <= 0)
 	    return;
 	g.clearRect(0, 0, ds.width, ds.height);
