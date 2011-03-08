@@ -18,10 +18,20 @@ public class Playfield extends JPanel implements Runnable {
     private int d;
     private Thread t = null;
     private boolean threadSuspended = true;
+    private static Random prng = new Random();
     // http://www.rgagnon.com/javadetails/java-0260.html
     public static final BasicStroke stroke = new BasicStroke(2.0f);
     public static double DT;   // Physics time increment
     public static int DDT;   // Multiple for display time
+
+    private static void shuffle(Agent[] agents) {
+	for (int i = 0; i < agents.length - 1; i++) {
+	    int j = prng.nextInt(agents.length - i) + i;
+	    Agent tmp = agents[j];
+	    agents[j] = agents[i];
+	    agents[i] = tmp;
+	}
+    }
 
     public Playfield(int nagents, double dt, int ddt) {
 	DT = dt;
@@ -81,6 +91,7 @@ public class Playfield extends JPanel implements Runnable {
 	    for (int j = 0; j < DDT; j++) {
 		for (int i = 0; i < agents.length; i++)
 		    agents[i].control(agents, null);
+		shuffle(agents);
 		for (int i = 0; i < agents.length; i++)
 		    agents[i].step();
 	    }
