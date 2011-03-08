@@ -13,4 +13,10 @@ abstract public class AI {
 
     abstract public void
 	control(MeView me, AgentView[] agents, ThingView[] things);
+
+    static double angleDiff(double target, double current) {
+	if (Math.abs(target - current) > Math.PI)
+	    return 2.0 * Math.PI - (current - target);
+	return target - current;
+    }
 }
