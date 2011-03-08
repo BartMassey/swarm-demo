@@ -80,7 +80,7 @@ public class Playfield extends JPanel implements Runnable {
 	    long then = System.currentTimeMillis();
 	    for (int j = 0; j < DDT; j++) {
 		for (int i = 0; i < agents.length; i++)
-		    agents[i].control(agents[i], agents, null);
+		    agents[i].control(agents, null);
 		for (int i = 0; i < agents.length; i++)
 		    agents[i].step();
 	    }
