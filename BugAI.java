@@ -20,30 +20,17 @@ public class BugAI extends AI {
 	    throw new Error("internal error: no things yet");
 	me.a = 0;
 	me.vt = 0;
-	double cx = me.x - 0.5;
-	double cy = me.y - 0.5;
-	double ct = Math.PI / 2;
-	if (Math.abs(cx) <= 0.01) {
-	    if (Math.abs(cy) <= 0.01)
-		return;
-	    if (cy > 0)
-		cy = -Math.PI / 2;
-	} else {
-	    ct = Math.atan(-cy/cx);
-	}
-	double dt = ct - me.t;
-	System.err.println(dt);
-	if (Math.abs(dt) > 0.01) {
-	    if (dt > 0.01)
-		me.vt = me.VTMAX;
-	    else if (dt < -0.01)
-		me.vt = me.VTMIN;
-	    return;
-	}
+	double cx = 0.5 - me.x;
+	double cy = 0.5 - me.y;
+	double ct = Math.atan2(-cy, cx);
 	double d = Math.sqrt(cx * cx + cy * cy);
-	if (-me.AMIN * me.v * me.v * 0.5 < d)
-	    me.a = -me.AMIN;
-	else
-	    me.a = me.AMIN;
+	double dct = angleDiff(ct, me.t);
+	if (d > 0.05) {
+	    me.vt = me.VTMAX * dct;
+	    if (dct > 0.01)
+		return;
+	    double v0 = d;
+	    me.a = v0 - me.v;
+	}
     }
 }
