@@ -38,7 +38,7 @@ abstract public class Agent extends Motile {
 	    return;
 	}
 	v += a * dt;
-	v -= v * r * r * CDRAG;
+	v -= v * r * r * CDRAG * dt;
     }
 
     static double clamp(double v, double lo, double hi) {
@@ -49,19 +49,19 @@ abstract public class Agent extends Motile {
 	return v;
     }
 
-    public void control(Agent me, Agent[] agents, Thing[] things) {
+    public void control(Agent[] agents, Thing[] things) {
 	MeView meV = new MeView();
-	meV.t = me.t;
-	meV.vt = me.vt;
-	meV.x = me.x;
-	meV.y = me.y;
-	meV.r = me.r;
-	meV.a = me.a;
-	meV.AMIN = me.AMIN;
-	meV.AMAX = me.AMAX;
-	meV.VTMIN = me.VTMIN;
-	meV.VTMAX = me.VTMAX;
-	meV.CDRAG = me.CDRAG;
+	meV.t = t;
+	meV.vt = vt;
+	meV.x = x;
+	meV.y = y;
+	meV.r = r;
+	meV.a = a;
+	meV.AMIN = AMIN;
+	meV.AMAX = AMAX;
+	meV.VTMIN = VTMIN;
+	meV.VTMAX = VTMAX;
+	meV.CDRAG = CDRAG;
 	AgentView[] aVs = new AgentView[agents.length];
 	for (int i = 0; i < aVs.length; i++) {
 	    aVs[i] = new AgentView();
@@ -75,7 +75,7 @@ abstract public class Agent extends Motile {
 	if (things != null)
 	    throw new Error("internal error: no things yet");
 	ai.control(meV, aVs, null);
-	me.a = clamp (meV.a, me.AMIN, me.AMAX);
-	me.vt = clamp (meV.vt, me.VTMIN, me.VTMAX);
+	a = clamp (meV.a, AMIN, AMAX);
+	vt = clamp (meV.vt, VTMIN, VTMAX);
     }
 }
