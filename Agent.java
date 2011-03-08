@@ -38,7 +38,12 @@ abstract public class Agent extends Motile {
 	    return;
 	}
 	v += a * dt;
-	v -= v * r * r * CDRAG * dt;
+	double drag = r * r * CDRAG;
+	if (drag >= 0.95) {
+	    System.err.println("internal error: CDRAG too big");
+	    System.exit(1);
+	}
+	v -= v * drag;
     }
 
     static double clamp(double v, double lo, double hi) {
