@@ -12,7 +12,7 @@ import java.util.*;
  *  get your own AI. */
 abstract public class AI {
     /** Simulation timestep in seconds, taken from
-     *  <tt>Playfield.DT</tt> for convenience. */
+     *  {@link .Playfield.DT} for convenience. */
     double dt = Playfield.DT;
 
     /** The controller takes in sensor data from the environment

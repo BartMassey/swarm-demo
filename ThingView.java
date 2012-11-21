@@ -8,7 +8,14 @@
 import java.lang.*;
 import java.util.*;
 
+/** Things that other agents can see. */
 public class ThingView {
+    /** What class this thing belongs to. */
     Class c;
-    double r, x, y;
+    /** X coordinate. */
+    double x;
+    /** Y coordinate. */
+    double y;
+    /** Radius of thing. (Things are currently presumed to be circular.) */
+    double r;
 }

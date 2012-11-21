@@ -10,9 +10,10 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 
+/** Sample agent. Little bug with some physics and a cute icon. */
 public class Bug extends Agent {
-    static double V0 = 1.0;
 
+    /** Make a bug on the given playfield. */
     public Bug(Playfield playfield) {
 	super(playfield);
 	r = 0.02;
@@ -30,6 +31,11 @@ public class Bug extends Agent {
 	ai = new BugAI();
     }
 
+    /** Paint the bug on the screen.
+     *
+     *  @param g   Graphics context for painting.
+     *  @param d   Scale parameter.
+     */
     public void paintComponent(Graphics g, int d) {
 	g.setColor(Color.blue);
 	int x0 = (int) Math.floor(x * d + 0.5);
@@ -42,6 +48,8 @@ public class Bug extends Agent {
 	g.drawLine(x0, y0, x1, y1);
     }
 
+    /** When the bug collides, its velocity and acceleration
+     *  go to zero. */
     public void thump() {
 	v = 0; a = 0;
     }

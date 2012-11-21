@@ -8,6 +8,13 @@
 import java.lang.*;
 import java.util.*;
 
+/** Class that controls what properties of an
+ *  agent another agent can see, beyond those
+ *  provided by {@link .ThingView}.
+ */
 public class AgentView extends ThingView {
-    double t, v;
+    /** Agent's angle. */
+    double t;
+    /** Agent's velocity. */
+    double v;
 }

@@ -5,14 +5,16 @@
  * distribution of this software for license terms.
  */
 
-// Animated "swarm of bugs" for AI swarm demo.
-
 import java.lang.*;
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 
+/** Animated "swarm of bugs" for AI swarm demo,
+ *  utilizing an extensible Java framework built
+ *  for these kinds of simulations. */
 public class Swarm {
+    /** Run the demo. */
     public static void main(String[] args) {
 	if (args.length != 1) {
 	    System.err.println ("usage: Swarm <nbugs>");
@@ -26,6 +28,7 @@ public class Swarm {
 	    });
     }
 
+    /** Set up the top-level window in which the GUI will run. */
     private static void createAndShowGUI(int nbugs) {
 	JFrame f = new JFrame("Swarm Demo");
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -8,7 +8,14 @@
 import java.lang.*;
 import java.util.*;
 
+/** Control parameters of an agent that the
+ *  agent itself can know.
+ */
 public class MeView extends AgentView {
-    double vt, a, at;
+    /** Turn rate. */
+    double vt;
+    /** Acceleration. */
+    double a;
+    /** Bounding parameter, for convenience. */
     double AMIN, AMAX, VTMIN, VTMAX, CDRAG;
 }

@@ -5,25 +5,43 @@
  * distribution of this software for license terms.
  */
 
-// http://download.oracle.com/javase/tutorial/uiswing/painting/step1.html
-
 import java.lang.*;
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 
+/** Simulation playfield class. This is where the mechanics
+ *  of the simulation play out, including rendering. See
+ *  <a href="http://download.oracle.com/javase/tutorial/uiswing/painting/step1.html">http://download.oracle.com/javase/tutorial/uiswing/painting/step1.html</a>
+ *  for the canonical tutorial on painting in Swing.
+ */
 public class Playfield extends JPanel implements Runnable {
+    /** Needed by Java for obscure reasons. */
     static final long serialVersionUID = 0;
+    /** Array of agents in the simulation. */
     private Agent[] agents;
+    /** Graphics scale factor. */
     private int d;
+    /** The simulation thread. */
     private Thread t = null;
+    /** Whether the simulation thread is running. */
     private boolean threadSuspended = true;
+    /** Enables random simulation behavior. */
     private static Random prng = new Random();
-    // http://www.rgagnon.com/javadetails/java-0260.html
+    /** Stroke used to draw things in the simulation.
+     *  Thanks to
+     *  <a href="http://www.rgagnon.com/javadetails/java-0260.html">http://www.rgagnon.com/javadetails/java-0260.html</a>
+     *  for the tip on this.
+     */
     public static BasicStroke stroke;
-    public static double DT;   // Physics time increment
-    public static int DDT;   // Multiple for display time
+    /** Physics time increment. */
+    public static double DT;
+    /** Multiple for display time. That is, a new frame
+     *  will be drawn every DDT physics time steps.
+     */
+    public static int DDT;
 
+    /** Shuffles the array of agents for fairness. */
     private static void shuffle(Agent[] agents) {
 	for (int i = 0; i < agents.length - 1; i++) {
 	    int j = prng.nextInt(agents.length - i) + i;
@@ -33,6 +51,12 @@ public class Playfield extends JPanel implements Runnable {
 	}
     }
 
+    /** Make a playfield.
+     *
+     *  @param nagents   Number of agents to put on the field.
+     *  @param dt   Simulation timestep.
+     *  @param ddt  Display timestep multiplier.
+     */
     public Playfield(int nagents, double dt, int ddt) {
 	DT = dt;
 	DDT = ddt;
@@ -43,10 +67,15 @@ public class Playfield extends JPanel implements Runnable {
 	    while(collision(agents[i]));
     }
 
+    /** Default size of display. */
     public Dimension getPreferredSize() {
 	return new Dimension(250,250);
     }
 
+    /** Returns True iff the given agent
+     *  has collided with something: another
+     *  agent, a thing, a wall.
+     */
     public boolean collision(Agent b) {
 	boolean result = false;
 
@@ -65,6 +94,8 @@ public class Playfield extends JPanel implements Runnable {
 	return result;
     }
 
+    /** Draw the playfield, by drawing each
+     *  thing and agent on it. */
     public void paintComponent(Graphics g) {
 	super.paintComponent(g);
 
@@ -86,7 +117,10 @@ public class Playfield extends JPanel implements Runnable {
 	    agents[i].paintComponent(g, d);
     }
 
-    // http://profs.etsmtl.ca/mmcguffin/learn/java/06-threads/
+    /** Run the animation thread.  Thanks to
+     *  <a href="http://profs.etsmtl.ca/mmcguffin/learn/java/06-threads/">http://profs.etsmtl.ca/mmcguffin/learn/java/06-threads/</a>
+     *  for the tutorial on animation threads.
+     */
     public void run() {
 	while(true) {
 	    long then = System.currentTimeMillis();
@@ -124,6 +158,7 @@ public class Playfield extends JPanel implements Runnable {
 	}
     }
 
+    /** Start the animation thread. */
     public void start() {
 	if (t == null) {
 	    t = new Thread(this);
@@ -139,6 +174,7 @@ public class Playfield extends JPanel implements Runnable {
 	}
     }
 
+    /** Pause the animation thread. */
     public void stop() {
 	threadSuspended = true;
     }
