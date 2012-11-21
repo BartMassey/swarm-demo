@@ -13,7 +13,7 @@ import java.awt.*;
 /** Abstract class of things that move. */
 abstract public class Motile extends Thing {
     /** Simulation timestep in seconds, taken from
-     *  {@link .Playfield.DT} for convenience. */
+     *  {@link Playfield#DT} for convenience. */
     double dt = Playfield.DT;
     /** Enables random behavior. */
     static Random prng = new Random();

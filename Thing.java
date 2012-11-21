@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /** Abstract class of "things" that can be in the simulation.
- *  Currently only implemented by {@link .Motile}. */
+ *  Currently only implemented by {@link Motile}. */
 abstract public class Thing {
     /** Counter for generating a unique ID for each thing. */
     static int nextId = 0;

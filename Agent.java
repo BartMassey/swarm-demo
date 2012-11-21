@@ -10,7 +10,7 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 
-/** Subclass this to produce an agent. See the {@link .Bug}
+/** Subclass this to produce an agent. See the {@link Bug}
  *  class for an example implementation. */
 abstract public class Agent extends Motile {
     /** Current angle "theta". */
@@ -22,9 +22,9 @@ abstract public class Agent extends Motile {
     /** Current acceleration. */
     double a;
     /** Simulation timestep in seconds, taken from
-     *  {@link .Playfield.DT} for convenience. */
+     *  {@link Playfield#DT} for convenience. */
     double dt = Playfield.DT;
-    /** The {@link .AI} controlling this agent. */
+    /** The {@link AI} controlling this agent. */
     AI ai;
     /** Minimum acceleration. */
     double AMIN;
@@ -37,7 +37,7 @@ abstract public class Agent extends Motile {
     /** Coefficient of drag. */
     double CDRAG;
 
-    /** Make an {@link .Agent} on the given {@link .Playfield}. */
+    /** Make an agent on the given playfield. */
     public Agent(Playfield playfield) {
 	super(playfield);
     }
@@ -87,7 +87,7 @@ abstract public class Agent extends Motile {
 	return v;
     }
 
-    /** Invoke the {@link AI.#control} method of each
+    /** Invoke the {@link AI#control} method of each
         agent in the simulation with the appropriate
         view. This would not normally be overridden. */
     public void control(Agent[] agents, Thing[] things) {
