@@ -20,7 +20,10 @@ CLASSES = Swarm.class $(AUXCLASSES)
 
 Swarm.class: $(AUXCLASSES)
 
-javadoc:
+doc:
+	mkdir doc
+
+javadoc: doc
 	cd doc; javadoc -private -sourcepath .. \
 	  `echo $(SOURCES) | sh ../fixpath.sh`
 

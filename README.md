@@ -82,4 +82,8 @@ acceleration and velocity. They still turn at the normal
 rate, but they typically get "stuck" and can't move until
 they either back up or turn around.
 
+There is a Makefile for building this. It's kind of kludgy,
+but it works. Say "`make`" to build the demo. Say
+"`make javadoc`" to build javadocs in the "doc" subdirectory.
+
 Mostly, this code is supposed to be fun to play with. Enjoy!
