@@ -10,6 +10,8 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 
+/** Subclass this to produce an agent. See the {@link .Bug}
+ *  class for an example implementation. */
 abstract public class Agent extends Motile {
     double t;
     double v, vt;
