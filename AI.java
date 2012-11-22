@@ -24,7 +24,7 @@ abstract public class AI {
      *                  in the environment.
      */
     abstract public void
-	control(MeView me, AgentView[] agents, ThingView[] things);
+        control(MeView me, AgentView[] agents, ThingView[] things);
 
     /** This is just a convenience routine for subtracting
      *  two angles. It has the desirable property that the
@@ -37,8 +37,8 @@ abstract public class AI {
      *  @return   Angular change needed to achieve desired facing.
      */
     public static double angleDiff(double target, double current) {
-	if (Math.abs(target - current) > Math.PI)
-	    return 2.0 * Math.PI - (current - target);
-	return target - current;
+        if (Math.abs(target - current) > Math.PI)
+            return 2.0 * Math.PI - (current - target);
+        return target - current;
     }
 }

@@ -30,16 +30,16 @@ abstract public class Thing {
 
     /** Create a thing on the given playfield. */
     public Thing(Playfield playfield) {
-	this.playfield = playfield;
+        this.playfield = playfield;
     }
 
     /** Return True if this thing has collided
      *  with the given other thing. */
     public boolean thingCollision(Thing b) {
-	double dx = b.x - x;
-	double dy = b.y - y;
-	double dr = b.r + r;
-	return (dx * dx + dy * dy <= dr * dr);
+        double dx = b.x - x;
+        double dy = b.y - y;
+        double dr = b.r + r;
+        return (dx * dx + dy * dy <= dr * dr);
     }
 
     /** Draw this thing.
