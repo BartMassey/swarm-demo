@@ -38,8 +38,8 @@ abstract public class Agent extends Motile {
     double CDRAG;
 
     /** Make an agent on the given playfield. */
-    public Agent(Playfield playfield) {
-        super(playfield);
+    public Agent(Playfield playfield, String name) {
+        super(playfield, name);
     }
 
     /** Method called when the agent collides with something.

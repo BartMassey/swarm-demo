@@ -27,10 +27,13 @@ abstract public class Thing {
     static Random prng = new Random();
     /** Playfield on which thing will be placed. */
     Playfield playfield;
+    /** Name of individual thing (instance). */
+    String name;
 
     /** Create a thing on the given playfield. */
-    public Thing(Playfield playfield) {
+    public Thing(Playfield playfield, String name) {
         this.playfield = playfield;
+        this.name = name;
     }
 
     /** Return True if this thing has collided

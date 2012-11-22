@@ -14,8 +14,8 @@ import java.awt.*;
 public class Bug extends Agent {
 
     /** Make a bug on the given playfield. */
-    public Bug(Playfield playfield) {
-        super(playfield);
+    public Bug(Playfield playfield, String name) {
+        super(playfield, name);
         r = 0.02;
         x = prng.nextDouble();
         y = prng.nextDouble();
