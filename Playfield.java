@@ -63,7 +63,7 @@ public class Playfield extends JPanel implements Runnable {
         agents = new Agent[nagents];
         for (int i = 0; i < nagents; i++)
             do
-                agents[i] = new Bug(this, "Bug");
+                agents[i] = new Bug(this, "Bug " + i);
             while(collision(agents[i]));
     }
 
