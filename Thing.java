@@ -27,19 +27,22 @@ abstract public class Thing {
     static Random prng = new Random();
     /** Playfield on which thing will be placed. */
     Playfield playfield;
+    /** Name of individual thing (instance). */
+    String name;
 
     /** Create a thing on the given playfield. */
-    public Thing(Playfield playfield) {
-	this.playfield = playfield;
+    public Thing(Playfield playfield, String name) {
+        this.playfield = playfield;
+        this.name = name;
     }
 
     /** Return True if this thing has collided
      *  with the given other thing. */
     public boolean thingCollision(Thing b) {
-	double dx = b.x - x;
-	double dy = b.y - y;
-	double dr = b.r + r;
-	return (dx * dx + dy * dy <= dr * dr);
+        double dx = b.x - x;
+        double dy = b.y - y;
+        double dr = b.r + r;
+        return (dx * dx + dy * dy <= dr * dr);
     }
 
     /** Draw this thing.

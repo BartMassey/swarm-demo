@@ -12,6 +12,9 @@ import java.util.*;
 public class ThingView {
     /** What class this thing belongs to. */
     Class c;
+    /** The name of this thing. Used for debugging output - or maybe other
+     * things in the future. */
+    String name;
     /** X coordinate. */
     double x;
     /** Y coordinate. */

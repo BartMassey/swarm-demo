@@ -12,7 +12,7 @@ public class BugAI extends AI {
     static Random prng = new Random();
     
     static double nextSignedDouble() {
-	return 2.0 * prng.nextDouble() - 1.0;
+        return 2.0 * prng.nextDouble() - 1.0;
     }
 
     static double normalizeAngle(double a) {
