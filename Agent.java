@@ -38,8 +38,8 @@ abstract public class Agent extends Motile {
     double CDRAG;
 
     /** Make an agent on the given playfield. */
-    public Agent(Playfield playfield) {
-        super(playfield);
+    public Agent(Playfield playfield, String name) {
+        super(playfield, name);
     }
 
     /** Method called when the agent collides with something.
@@ -57,7 +57,7 @@ abstract public class Agent extends Motile {
             t += 2 * Math.PI;
         while (t >= Math.PI)
             t -= 2 * Math.PI;
-               if (playfield.collision(this)) {
+        if (playfield.collision(this, true)) {
             x = x0; y = y0; t = t0;
             return;
         }

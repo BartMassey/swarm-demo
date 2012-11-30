@@ -25,8 +25,8 @@ abstract public class Motile extends Thing {
     }
 
     /** Create a motile on the given playfield. */
-    public Motile(Playfield playfield) {
-        super(playfield);
+    public Motile(Playfield playfield, String name) {
+        super(playfield, name);
     }
 
     /** Check for collision with a wall.
