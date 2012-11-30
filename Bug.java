@@ -48,14 +48,10 @@ public class Bug extends Agent {
         g.drawLine(x0, y0, x1, y1);
     }
 
-    private boolean thumped = false;
-
     /** When the bug collides, its velocity and acceleration
      *  go to zero. */
-    public synchronized void thump() {
+    public void thump() {
         v = 0; a = 0;
-        if (!thumped) System.out.println(this.name + " got thumped.");
-        this.thumped = true;
     }
 
 }

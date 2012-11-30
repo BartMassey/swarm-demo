@@ -64,7 +64,7 @@ public class Playfield extends JPanel implements Runnable {
         for (int i = 0; i < nagents; i++)
             do
                 agents[i] = new Bug(this, "Bug " + i);
-            while(collision(agents[i]));
+            while(collision(agents[i], false));
     }
 
     /** Default size of display. */
@@ -76,19 +76,22 @@ public class Playfield extends JPanel implements Runnable {
      *  has collided with something: another
      *  agent, a thing, a wall.
      */
-    public boolean collision(Agent b) {
+    public boolean collision(Agent b, boolean thump) {
         boolean result = false;
 
         if (b.wallCollision()) {
             result = true;
-            b.thump();
+            if (thump)
+                b.thump();
         }
         for (int i = 0; i < agents.length; i++) {
             if (agents[i] != null && agents[i].id != b.id &&
                 agents[i].thingCollision(b)) {
                 result = true;
-                b.thump();
-                agents[i].thump();
+                if (thump) {
+                    b.thump();
+                    agents[i].thump();
+                }
             }
         }
         return result;
